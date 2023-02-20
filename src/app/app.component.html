@@ -1,15 +1,24 @@
 <router-outlet></router-outlet>
 
-<h1 *ngIf="fetching">LOADING</h1>
+<h1>POKEMONS</h1>
 
-<ul *ngIf="!fetching">
-  <li *ngFor="let pokemon of pokemons">
-    <h1>
-      {{ pokemon.name }}
-    </h1>
-    <img
-      src="{{ pokemon.sprites['front_default'] }}"
-      alt="{{ pokemon.name }}"
-    />
-  </li>
-</ul>
+<p class="loading" *ngIf="fetching">LOADING</p>
+
+<div class="pokemon-container">
+  <ul *ngIf="!fetching">
+    <li *ngFor="let pokemon of pokemons">
+      <p>
+        {{ pokemon.name }}
+      </p>
+      <img
+        src="{{ pokemon.sprites['front_default'] }}"
+        alt="{{ pokemon.name }}"
+      />
+    </li>
+  </ul>
+</div>
+
+<div class="button-container">
+  <button (click)="fetchPreviousPokemons()">⬅️</button>
+  <button (click)="fetchNextPokemons()">➡️</button>
+</div>

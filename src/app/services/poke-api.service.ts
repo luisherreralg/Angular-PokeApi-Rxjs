@@ -16,10 +16,10 @@ export class PokeApiService {
 
   constructor(private http: HttpClient) {}
 
-  private getPokemonList(): Observable<PokemonList> {
+  private getPokemonList(offset: number): Observable<PokemonList> {
     this.fetching.next(true);
     return this.http.get(
-      this.apiUrl + 'pokemon?limit=20&offset=0/'
+      this.apiUrl + `pokemon?limit=20&offset=${offset}/`
     ) as Observable<PokemonList>;
   }
 
@@ -34,8 +34,8 @@ export class PokeApiService {
     return forkJoin(requests);
   }
 
-  fetchPokemons() {
-    this.getPokemonList()
+  fetchPokemons(offset: number = 0) {
+    this.getPokemonList(offset)
       .pipe(
         switchMap((data) => {
           const pokemonList: string[] = data.results.map((pokemon) => {

@@ -1,0 +1,82 @@
+ul {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 1rem;
+
+  li {
+    list-style: none;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    p {
+      padding: 1rem;
+      font-size: 1.5rem;
+    }
+
+    p:first-letter {
+      text-transform: uppercase;
+    }
+  }
+}
+
+h1 {
+  text-align: center;
+  font-size: 3rem;
+  margin: 1rem;
+}
+
+.pokemon-container,
+.button-container {
+  width: 80%;
+  height: 100%;
+  margin: 1em auto;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-around;
+}
+
+.loading {
+  font-size: 5rem;
+}
+
+// Media Queries
+
+@media (max-width: 1920px) {
+  ul {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (max-width: 1440px) {
+  ul {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+@media (max-width: 1280px) {
+  ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 1024px) {
+  ul {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  ul {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  ul {
+    grid-template-columns: repeat(1, 1fr);
+  }
+}

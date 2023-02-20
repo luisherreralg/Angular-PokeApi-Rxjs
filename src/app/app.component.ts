@@ -1,7 +1,7 @@
 import { Component, OnChanges, SimpleChanges } from '@angular/core';
 import { PokeApiService } from './services/poke-api.service';
 import { OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { finalize, Subject, Subscription, takeUntil } from 'rxjs';
 import { Pokemon } from './types/Pokemon';
 
 @Component({
@@ -12,8 +12,9 @@ import { Pokemon } from './types/Pokemon';
 export class AppComponent implements OnInit, OnDestroy {
   pokemons: Pokemon[];
   fetching = false;
+  offset = 0;
 
-  private activeSubscription: Subscription[] = [];
+  onDestroy$ = new Subject();
 
   constructor(private apiService: PokeApiService) {
     this.pokemons = [];
@@ -22,22 +23,31 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.apiService.fetchPokemons();
 
-    this.activeSubscription.push(
-      this.apiService.fetching.subscribe((data) => {
+    this.apiService.fetching
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((data) => {
         this.fetching = data;
-      })
-    );
+      });
 
-    this.activeSubscription.push(
-      this.apiService.pokemons.subscribe((data) => {
+    this.apiService.pokemons
+      .pipe(takeUntil(this.onDestroy$))
+      .subscribe((data) => {
         this.pokemons = data;
-      })
-    );
+      });
   }
 
   ngOnDestroy(): void {
-    this.activeSubscription.forEach((sub) => {
-      sub.unsubscribe();
-    });
+    this.onDestroy$.next('destroyed');
+    this.onDestroy$.complete();
+  }
+
+  fetchNextPokemons() {
+    this.offset += 20;
+    this.apiService.fetchPokemons(this.offset);
+  }
+
+  fetchPreviousPokemons() {
+    this.offset -= 20;
+    this.apiService.fetchPokemons(this.offset < 0 ? 0 : this.offset);
   }
 }
